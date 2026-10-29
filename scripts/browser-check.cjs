@@ -94,20 +94,32 @@ async function checkNavigation(page) {
 async function checkSidebarCollapse(page) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1440, height: 1100 });
-  await page.goto(chapterURL('mcp'));
-  await page.getByRole('button', { name: '收起目录', exact: true }).click();
-  assert.equal(await page.getByRole('button', { name: '展开目录', exact: true }).getAttribute('aria-expanded'), 'false');
-  assert.equal(await page.locator('#handbook-sidebar').getAttribute('aria-hidden'), 'true');
-  assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.handbook-workspace')).marginLeft), '0px');
-  await page.reload();
-  assert.equal(await page.locator('body').evaluate(body => body.classList.contains('is-sidebar-collapsed')), true);
-  await page.getByRole('button', { name: '展开目录', exact: true }).click();
-  assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.handbook-workspace')).marginLeft), '254px');
-  await page.setViewportSize({ width: 390, height: 844 });
-  assert.equal(await page.locator('.handbook-sidebar-toggle').isVisible(), false);
-  await page.setViewportSize({ width: 1440, height: 1100 });
-  await page.emulateMedia({ reducedMotion: 'no-preference' });
-  console.log('通过：桌面侧边栏收起、正文让位、刷新保持与移动端隐藏');
+  try {
+    await page.goto(chapterURL('mcp'));
+    await page.getByRole('button', { name: '收起目录', exact: true }).click();
+    assert.equal(await page.getByRole('button', { name: '展开目录', exact: true }).getAttribute('aria-expanded'), 'false');
+    assert.equal(await page.locator('#handbook-sidebar').getAttribute('aria-hidden'), 'true');
+    assert.equal(await page.locator('#handbook-sidebar').evaluate(sidebar => sidebar.inert), true);
+    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.handbook-workspace')).marginLeft), '0px');
+    assert.equal(await page.evaluate(() => localStorage.getItem('agent-handbook:sidebar')), 'collapsed');
+    assert.equal(await page.evaluate(() => {
+      const record = JSON.parse(localStorage.getItem('agent-handbook:v1') || 'null');
+      return record === null || !('sidebar' in record.state);
+    }), true);
+    await page.reload();
+    assert.equal(await page.locator('body').evaluate(body => body.classList.contains('is-sidebar-collapsed')), true);
+    assert.equal(await page.locator('#handbook-sidebar').getAttribute('aria-hidden'), 'true');
+    assert.equal(await page.locator('#handbook-sidebar').evaluate(sidebar => sidebar.inert), true);
+    await page.getByRole('button', { name: '展开目录', exact: true }).click();
+    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.handbook-workspace')).marginLeft), '254px');
+    assert.equal(await page.locator('#handbook-sidebar').evaluate(sidebar => sidebar.inert), false);
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.equal(await page.locator('.handbook-sidebar-toggle').isVisible(), false);
+  } finally {
+    await page.setViewportSize({ width: 1440, height: 1100 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+  }
+  console.log('通过：桌面侧边栏收起、正文让位、刷新保持、记录隔离与移动端隐藏');
 }
 
 async function checkResponsive(page) {
