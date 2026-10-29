@@ -1,4 +1,5 @@
 const HANDBOOK_SIDEBAR_KEY = 'agent-handbook:sidebar';
+const HANDBOOK_MOBILE_QUERY = '(max-width: 760px)';
 
 class HandbookApp {
   constructor({ root, storage }) {
@@ -11,6 +12,8 @@ class HandbookApp {
     document.body.classList.toggle('is-sidebar-collapsed', this.sidebarCollapsed);
     this.root.innerHTML = handbookShell();
     this.main = root.querySelector('#handbook-main');
+    this.sidebar = root.querySelector('#handbook-sidebar');
+    this.sidebarToggle = root.querySelector('[data-action="sidebar-toggle"]');
     this.syncSidebarToggle();
     this.bindEvents();
     this.renderRoute();
@@ -28,7 +31,7 @@ class HandbookApp {
     this.root.addEventListener('compositionend', event => this.run(() => this.handleInput(event)));
     window.addEventListener('hashchange', () => this.run(() => this.renderRoute()));
     window.addEventListener('keydown', event => this.handleKeyboard(event));
-    matchMedia('(max-width: 760px)').addEventListener('change', () => this.setMenu(false));
+    matchMedia(HANDBOOK_MOBILE_QUERY).addEventListener('change', () => this.setMenu(false));
     window.addEventListener('storage', event => {
       if (event.key === HANDBOOK_STORAGE_KEY) this.showToast('另一标签页更新了记录。请刷新此页以读取最新进度。');
     });
@@ -85,7 +88,7 @@ class HandbookApp {
   }
 
   updateSidebar(activeId) {
-    const sidebar = this.root.querySelector('#handbook-sidebar');
+    const sidebar = this.sidebar;
     const previousScroll = sidebar.querySelector('.handbook-chapter-nav')?.scrollTop || 0;
     sidebar.innerHTML = handbookSidebar(this.state, activeId);
     const nav = sidebar.querySelector('.handbook-chapter-nav');
@@ -196,7 +199,7 @@ class HandbookApp {
   }
 
   setMenu(open) {
-    const sidebar = this.root.querySelector('#handbook-sidebar');
+    const sidebar = this.sidebar;
     const wasOpen = sidebar.classList.contains('is-open');
     sidebar.classList.toggle('is-open', open);
     const { mobile } = this.syncSidebarVisibility();
@@ -209,10 +212,9 @@ class HandbookApp {
   }
 
   toggleSidebar() {
-    const sidebar = this.root.querySelector('#handbook-sidebar');
-    const hadFocus = sidebar.contains(document.activeElement);
+    const hadFocus = this.sidebar.contains(document.activeElement);
     this.setSidebarCollapsed(!this.sidebarCollapsed);
-    if (this.sidebarCollapsed && hadFocus) this.root.querySelector('[data-action="sidebar-toggle"]').focus();
+    if (this.sidebarCollapsed && hadFocus) this.sidebarToggle.focus();
   }
 
   setSidebarCollapsed(collapsed) {
@@ -221,28 +223,28 @@ class HandbookApp {
     try {
       if (collapsed) this.storage.setItem(HANDBOOK_SIDEBAR_KEY, 'collapsed');
       else this.storage.removeItem(HANDBOOK_SIDEBAR_KEY);
-    } catch (error) { console.error('侧边栏偏好保存失败', error); }
+    } catch (error) {
+      console.error('侧边栏偏好保存失败', error);
+      this.showToast('侧边栏偏好未能保存，仅本次有效');
+    }
     this.syncSidebarToggle();
     this.syncSidebarVisibility();
   }
 
   syncSidebarToggle() {
-    const button = this.root.querySelector('[data-action="sidebar-toggle"]');
-    if (!button) return;
     const label = this.sidebarCollapsed ? '展开目录' : '收起目录';
-    button.innerHTML = handbookIcon(this.sidebarCollapsed ? 'expand' : 'collapse');
-    button.setAttribute('aria-expanded', String(!this.sidebarCollapsed));
-    button.setAttribute('aria-label', label);
-    button.title = label;
+    this.sidebarToggle.innerHTML = handbookIcon(this.sidebarCollapsed ? 'expand' : 'collapse');
+    this.sidebarToggle.setAttribute('aria-expanded', String(!this.sidebarCollapsed));
+    this.sidebarToggle.setAttribute('aria-label', label);
+    this.sidebarToggle.title = label;
   }
 
   syncSidebarVisibility() {
-    const sidebar = this.root.querySelector('#handbook-sidebar');
-    const mobile = matchMedia('(max-width: 760px)').matches;
-    const hidden = mobile ? !sidebar.classList.contains('is-open') : this.sidebarCollapsed;
-    sidebar.inert = hidden;
-    sidebar.setAttribute('aria-hidden', String(hidden));
-    return { sidebar, mobile };
+    const mobile = matchMedia(HANDBOOK_MOBILE_QUERY).matches;
+    const hidden = mobile ? !this.sidebar.classList.contains('is-open') : this.sidebarCollapsed;
+    this.sidebar.inert = hidden;
+    this.sidebar.setAttribute('aria-hidden', String(hidden));
+    return { mobile };
   }
 
   trapMenuFocus(event) {

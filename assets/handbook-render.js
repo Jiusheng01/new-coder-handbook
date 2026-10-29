@@ -33,7 +33,7 @@ function handbookIcon(name, className = '') {
 
 function handbookShell() {
   return `<aside class="handbook-sidebar" id="handbook-sidebar" aria-label="手册目录"></aside>
-    <button class="handbook-sidebar-toggle" data-action="sidebar-toggle" aria-controls="handbook-sidebar" aria-expanded="true" aria-label="收起目录" title="收起目录">${handbookIcon('collapse')}</button>
+    <button class="handbook-sidebar-toggle" data-action="sidebar-toggle" aria-controls="handbook-sidebar">${handbookIcon('collapse')}</button>
     <button class="handbook-backdrop" data-action="menu-close" aria-label="关闭目录" hidden></button>
     <div class="handbook-workspace">
       <header class="handbook-topbar">
