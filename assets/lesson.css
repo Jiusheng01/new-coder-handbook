@@ -157,7 +157,7 @@
 @media print {
   @page { margin: 18mm; }
   body { color: #222; background: white; }
-  .handbook-sidebar, .handbook-topbar, .handbook-footer, .handbook-backdrop, .handbook-toast, .handbook-storage-error, .lesson-toc, .lesson-header-top > div, .lesson-finish, .lesson-pagination, .handbook-skip { display: none !important; }
+  .handbook-sidebar, .handbook-sidebar-toggle, .handbook-topbar, .handbook-footer, .handbook-backdrop, .handbook-toast, .handbook-storage-error, .lesson-toc, .lesson-header-top > div, .lesson-finish, .lesson-pagination, .handbook-skip { display: none !important; }
   .handbook-workspace { margin-left: 0; }
   .handbook-main { padding: 0; max-width: none; }
   .lesson-breadcrumb { padding-top: 0; }
