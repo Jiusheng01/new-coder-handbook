@@ -1,0 +1,13 @@
+{
+  "name": "linuxdo-learning-handbook",
+  "version": "1.0.0",
+  "private": true,
+  "description": "后端开发者的 Agent 学习手记：离线可读的手绘静态手册",
+  "scripts": {
+    "check": "node scripts/verify.cjs",
+    "test": "node --test scripts/state.test.cjs",
+    "test:browser": "node scripts/browser-check.cjs",
+    "test:deploy": "timeout 60s python3 -m unittest discover -s tests -p 'test_publish.py' -v"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,65 @@
+name: 检查并部署手册
+
+on:
+  push:
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: handbook-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: 内容与发布检查
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - run: npm run check
+      - run: npm test
+      - run: npm run test:deploy
+
+  deploy:
+    name: 发布到华为云
+    needs: verify
+    if: github.repository == vars.DEPLOY_REPOSITORY && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: http://139.159.249.100/
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: 配置专用 SSH 身份与固定主机公钥
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$HOME/.ssh/handbook_deploy"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/handbook_deploy" "$HOME/.ssh/known_hosts"
+      - name: 打包并原子发布主体手册
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          Path('assets/release.json').write_text(json.dumps({'commit': os.environ['GITHUB_SHA']}) + '\n')
+          PY
+          tar -czf "$RUNNER_TEMP/handbook.tar.gz" index.html assets
+          ssh -i "$HOME/.ssh/handbook_deploy" -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" "publish $GITHUB_SHA" < "$RUNNER_TEMP/handbook.tar.gz"
+      - name: 核对公网发布内容
+        run: python3 scripts/check-deployment.py http://139.159.249.100
+      - name: 清理临时部署私钥
+        if: always()
+        run: rm -f "$HOME/.ssh/handbook_deploy"

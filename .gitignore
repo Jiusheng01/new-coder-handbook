@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+*.sqlite*
+*.env
+node_modules/
+/backend/
+/deploy/nginx.conf
+/deploy/agent-handbook-stats.service
+/scripts/analytics-browser-check.cjs
+/scripts/build-catalog.cjs
+/assets/release.json
+*.pem
+*.key
+.DS_Store
