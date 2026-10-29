@@ -28,7 +28,7 @@
 
 需要手动部署时，打开 [GitHub Actions 发布页面](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，选择 **develop** 发布 GitHub Pages，或选择 **main** 发布正式版本。选择其他分支时只执行检查。
 
-欢迎通过 Fork 和 Pull Request 补充讲解、完善练习、纠正错误、分享经过验证的实践。协作方式与 GitHub 网页操作见 [协作说明](CONTRIBUTING.md)。
+本仓库仅向经所有者确认的内部成员授予写权限，内部成员可直接修改 `develop` 和功能分支；`main` 仅由 `qinsx2002` 更新或合并。欢迎外部贡献者通过 Fork 和 Pull Request 补充讲解、完善练习、纠正错误、分享经过验证的实践，PR 由内部成员审阅接收。权限边界、工作流批准与 GitHub 网页操作见 [协作说明](CONTRIBUTING.md)。
 
 GitHub Pages 由 GitHub 托管静态手册；华为云部署采用版本目录与 `current` 符号链接原子切换。详细配置、失败处理及人工回退见 [部署说明](deploy/README.md)。
 
