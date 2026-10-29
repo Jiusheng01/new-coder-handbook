@@ -2,10 +2,20 @@
 
 仓库：`qinsx2002/new-coder-handbook`，默认分支：`main`，协作分支：`develop`。
 
-## 更新流程
+## GitHub Pages 开发预览
 
-1. 从 `develop` 创建功能分支，修改正文、资源或交互代码。可以直接在 GitHub 网页编辑并提交。
-2. 功能分支通过 PR 合并至 `develop`，准备发布时在 GitHub 将 `develop` 的 PR 合并至 `main`。
+预览地址：**https://qinsx2002.github.io/new-coder-handbook/**。每次提交或合并至 `develop`，工作流通过内容、状态和发布检查后，自动打包静态手册并发布 GitHub Pages，最后逐文件核对线上内容。`assets/release.json` 记录当前发布的 Git commit。
+
+仓库 **Settings → Pages → Build and deployment → Source** 设为 **GitHub Actions**。`github-pages` 环境的部署分支设置为 `develop`，无需额外的云服务器或 SSH 凭据。工作流仅为 Pages 发布作业授予 `contents: read`、`pages: write` 与 `id-token: write` 权限。
+
+`develop` 分支的 `scripts/package-pages.py` 在 runner 临时目录生成静态发布包，仅包含页面入口及阅读所需资源；相对资源路径和 hash 路由可直接用于仓库子路径。每次发布目录新建，校验或发布失败会直接将工作流标记为失败。
+
+归档分支 `archive/main-before-github-pages-20261029` 保存接入前的 `main`，提交为 `f561d8e772392455ff176c93f85754c7006ea59c`。它只用于查阅或恢复，不自动部署。
+
+## 华为云正式版本更新流程
+
+1. 内部成员可以直接修改 `develop`，或从它创建功能分支后提交 PR；外部贡献者在自己的 Fork 中修改，再向本仓库的 `develop` 提交 PR。
+2. 内部成员审阅并合并开发 PR。准备正式发布时提交 `develop` → `main` 的 PR，只有所有者 `qinsx2002` 可以决定并执行合并。
 3. GitHub 托管的 runner 执行内容检查、状态测试和发布测试；检查通过后打包 `index.html`、`assets/`，通过专用 SSH 身份传至服务器。
 4. 服务端校验文件范围、完整包和提交号，再原子切换 `/var/www/agent-handbook/current`。
 5. Actions 逐文件比对公网内容，确认线上版本与本次提交一致。
@@ -14,23 +24,27 @@
 
 ## 在 GitHub 页面发起部署
 
-打开 [检查并部署手册](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，将 **Use workflow from** 设为 **main**，再点击 **Run workflow**。这会重新检查并发布当前主分支，不需要创建新提交。
+打开 [检查并部署手册](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，将 **Use workflow from** 设为 **develop** 发布 GitHub Pages，或设为 **main** 发布华为云，再点击 **Run workflow**。这会重新检查并发布所选分支，不需要创建新提交。
 
 | GitHub 事件 | 执行结果 |
 | --- | --- |
-| 提交或合并至 `main` | 自动检查，通过后部署 |
-| 提交至 `develop`、功能分支或其他分支 | 自动检查 |
+| 提交或合并至 `main` | 自动检查，通过后部署华为云 |
+| 提交或合并至 `develop` | 自动检查，通过后部署 GitHub Pages |
+| 提交至功能分支或其他分支 | 自动检查 |
 | PR 目标为 `main` 或 `develop` | 自动检查 |
-| 页面手动运行 `main` | 检查，通过后部署 |
+| 页面手动运行 `main` | 检查，通过后部署华为云 |
+| 页面手动运行 `develop` | 检查，通过后部署 GitHub Pages |
 | 页面手动运行其他分支 | 检查 |
 
-所有操作由 GitHub 托管的 runner 执行，支持在 GitHub 网页上完成修改、PR 合并和部署。本机无需安装运行依赖，也无需保持开机。仓库协作者需要 **Write** 或更高权限才能提交仓库分支及手动运行工作流；其他贡献者通过 Fork 和 PR 参与。
+所有操作由 GitHub 托管的 runner 执行，本机无需安装运行依赖，也无需保持开机。所有者仅向内部成员授予 **Write** 权限，允许其直接修改 `develop`、功能分支及手动运行工作流；`main` 的更新、合并、删除与强制推送仅允许 `qinsx2002`。内部成员手动运行 `main` 只能重新部署所有者已确定的代码。其他贡献者通过 Fork 和 PR 参与，具体权限见 [协作说明](../CONTRIBUTING.md)。
 
-只有 `DEPLOY_REPOSITORY` 指定的仓库可以执行部署作业。Fork 仓库默认只运行检查；外部 PR 不会获得部署凭据。
+所有外部 Fork PR 在本仓库运行工作流前，均须由有写权限的内部成员批准；批准运行检查与合并 PR 是两个独立操作。Actions 默认令牌为只读，不允许 Actions 创建或批准 PR。只有 `DEPLOY_REPOSITORY` 指定的仓库可以执行部署作业；Fork 仓库默认只运行检查，外部 PR 不执行部署，也不会获得部署凭据。
 
-## GitHub 配置
+## 华为云 GitHub 配置
 
 工作流：[deploy.yml](../.github/workflows/deploy.yml)。部署环境：`production`。
+
+`production` 的 **Deployment branches and tags** 使用 **Selected branches and tags**，只允许类型为分支的 `main`；`github-pages` 同样只允许分支 `develop`。这两项由 GitHub 环境配置执行，不仅依赖工作流中的分支判断。修改成员权限、主分支规则和部署环境配置由所有者负责。
 
 | 配置类型 | 名称 | 用途 |
 | --- | --- | --- |

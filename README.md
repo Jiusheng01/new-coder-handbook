@@ -17,17 +17,20 @@
 
 ## 在线访问
 
-已部署至华为云：**http://139.159.249.100/**。
+| 版本 | 分支 | 访问地址 |
+| --- | --- | --- |
+| 开发预览 | `develop` | **https://qinsx2002.github.io/new-coder-handbook/** |
+| 正式版本 | `main` | **http://139.159.249.100/** |
 
 公开仓库：[qinsx2002/new-coder-handbook](https://github.com/qinsx2002/new-coder-handbook)。`main` 为线上版本，`develop` 为协作开发分支。
 
-各分支提交都会由 GitHub Actions 自动检查；在 GitHub 合并 PR 到 `main` 后，检查通过即自动发布至华为云。检查、打包、部署和线上核对全部由 GitHub 托管的 runner 执行，无需本机开机或启动服务。
+各分支提交都会由 GitHub Actions 自动检查。提交或合并 PR 到 `develop` 后，检查通过即自动发布至 GitHub Pages；合并至 `main` 后则自动发布至华为云。检查、打包、部署和线上核对全部由 GitHub 托管的 runner 执行，无需本机开机或启动服务。
 
-需要手动部署时，打开 [GitHub Actions 发布页面](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，选择 **main**，再点击 **Run workflow**。选择其他分支时只执行检查。
+需要手动部署时，打开 [GitHub Actions 发布页面](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，选择 **develop** 发布 GitHub Pages，或选择 **main** 发布正式版本。选择其他分支时只执行检查。
 
-欢迎通过 Fork 和 Pull Request 补充讲解、完善练习、纠正错误、分享经过验证的实践。协作方式与 GitHub 网页操作见 [协作说明](CONTRIBUTING.md)。
+本仓库仅向经所有者确认的内部成员授予写权限，内部成员可直接修改 `develop` 和功能分支；`main` 仅由 `qinsx2002` 更新或合并。欢迎外部贡献者通过 Fork 和 Pull Request 补充讲解、完善练习、纠正错误、分享经过验证的实践，PR 由内部成员审阅接收。权限边界、工作流批准与 GitHub 网页操作见 [协作说明](CONTRIBUTING.md)。
 
-部署采用版本目录与 `current` 符号链接原子切换。详细配置、失败处理及人工回退见 [部署说明](deploy/README.md)。
+GitHub Pages 由 GitHub 托管静态手册；华为云部署采用版本目录与 `current` 符号链接原子切换。详细配置、失败处理及人工回退见 [部署说明](deploy/README.md)。
 
 在线地址与本地文件的浏览器存储相互独立。已有本地学习记录可通过笔记页导出 JSON 后，在在线站点导入。
 
