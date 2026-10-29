@@ -13,7 +13,19 @@
 
 `main` 和 `develop` 是长期分支，功能和修复分支按实际任务创建。
 
-`archive/main-before-github-pages-20261029` 保存启用 GitHub Pages 前的 `main` 快照，不用于继续开发或部署。
+已从 `main` 创建并推送[归档分支 `archive/main-before-github-pages-20261029`](https://github.com/qinsx2002/new-coder-handbook/tree/archive/main-before-github-pages-20261029)，保存启用 GitHub Pages 前的完整代码快照，不用于继续开发或部署。
+
+## develop 自动部署与在线验收
+
+开发分支名称为 **`develop`**。该分支已接入 GitHub Pages 自动托管，访问地址：**https://qinsx2002.github.io/new-coder-handbook/**。
+
+1. 将代码推送至本仓库的 `develop`，或在 GitHub 将 PR 合并至 `develop`，即会自动触发部署流程。
+2. GitHub Actions 先执行内容检查、状态测试和发布测试，全部通过后自动发布 GitHub Pages，并逐文件核对线上内容。
+3. 在 [Actions 发布记录](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml?query=branch%3Adevelop) 中确认“内容与发布检查”和“发布 develop 到 GitHub Pages”成功后，打开上述地址验收改动。“发布到华为云”在此流程中显示跳过。
+
+协作者无需手动上传文件、运行部署命令或保持电脑开机。功能分支提交及尚未合并的 PR 只执行检查；合并至 `develop` 后才更新开发预览。流程失败时应查看 Actions 日志，不能把提交成功当作部署成功。
+
+首次接入于 **2026-10-29** 完成：[首次自动部署记录](https://github.com/qinsx2002/new-coder-handbook/actions/runs/40841467684)及线上文件核对均通过；浏览器验收也已通过章节浏览、笔记保存与导入导出、搜索和移动端布局检查。这是首次接入的验证结果，后续提交需以各自的 Actions 运行结果为准。
 
 ## 外部贡献者
 
