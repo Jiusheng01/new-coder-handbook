@@ -91,6 +91,25 @@ async function checkNavigation(page) {
   console.log('通过：键盘搜索、空结果、资料筛选与无效章节路由');
 }
 
+async function checkSidebarCollapse(page) {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await page.goto(chapterURL('mcp'));
+  await page.getByRole('button', { name: '收起目录', exact: true }).click();
+  assert.equal(await page.getByRole('button', { name: '展开目录', exact: true }).getAttribute('aria-expanded'), 'false');
+  assert.equal(await page.locator('#handbook-sidebar').getAttribute('aria-hidden'), 'true');
+  assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.handbook-workspace')).marginLeft), '0px');
+  await page.reload();
+  assert.equal(await page.locator('body').evaluate(body => body.classList.contains('is-sidebar-collapsed')), true);
+  await page.getByRole('button', { name: '展开目录', exact: true }).click();
+  assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.handbook-workspace')).marginLeft), '254px');
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(await page.locator('.handbook-sidebar-toggle').isVisible(), false);
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  console.log('通过：桌面侧边栏收起、正文让位、刷新保持与移动端隐藏');
+}
+
 async function checkResponsive(page) {
   for (const width of [320, 390, 768, 1024]) {
     await page.setViewportSize({ width, height: 844 });
@@ -133,6 +152,7 @@ async function main() {
     await checkLearning(page);
     await checkExports(page);
     await checkNavigation(page);
+    await checkSidebarCollapse(page);
     await checkResponsive(page);
     await checkOffline(browser);
     assert.deepEqual(errors, []);

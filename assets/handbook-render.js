@@ -24,13 +24,16 @@ function handbookIcon(name, className = '') {
     close: '<path d="m6 6 12 12M6 18 18 6"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
     download: '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
-    print: '<path d="M7 8V3h10v5M7 17H3V8h18v9h-4M7 14h10v8H7Zm10-3h1"/>'
+    print: '<path d="M7 8V3h10v5M7 17H3V8h18v9h-4M7 14h10v8H7Zm10-3h1"/>',
+    collapse: '<path d="m14 6-6 6 6 6"/><path d="M19 4v16"/>',
+    expand: '<path d="m10 6 6 6-6 6"/><path d="M5 4v16"/>'
   };
   return `<svg class="handbook-icon ${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`;
 }
 
 function handbookShell() {
   return `<aside class="handbook-sidebar" id="handbook-sidebar" aria-label="手册目录"></aside>
+    <button class="handbook-sidebar-toggle" data-action="sidebar-toggle" aria-controls="handbook-sidebar" aria-expanded="true" aria-label="收起目录" title="收起目录">${handbookIcon('collapse')}</button>
     <button class="handbook-backdrop" data-action="menu-close" aria-label="关闭目录" hidden></button>
     <div class="handbook-workspace">
       <header class="handbook-topbar">
