@@ -2,7 +2,17 @@
 
 仓库：`qinsx2002/new-coder-handbook`，默认分支：`main`，协作分支：`develop`。
 
-## 更新流程
+## GitHub Pages 开发预览
+
+预览地址：**https://qinsx2002.github.io/new-coder-handbook/**。每次提交或合并至 `develop`，工作流通过内容、状态和发布检查后，自动打包静态手册并发布 GitHub Pages，最后逐文件核对线上内容。`assets/release.json` 记录当前发布的 Git commit。
+
+仓库 **Settings → Pages → Build and deployment → Source** 设为 **GitHub Actions**。`github-pages` 环境的部署分支设置为 `develop`，无需额外的云服务器或 SSH 凭据。工作流仅为 Pages 发布作业授予 `contents: read`、`pages: write` 与 `id-token: write` 权限。
+
+`scripts/package-pages.py` 在 runner 临时目录生成静态发布包，仅包含页面入口及阅读所需资源；相对资源路径和 hash 路由可直接用于仓库子路径。每次发布目录新建，校验或发布失败会直接将工作流标记为失败。
+
+归档分支 `archive/main-before-github-pages-20261029` 保存接入前的 `main`，提交为 `f561d8e772392455ff176c93f85754c7006ea59c`。它只用于查阅或恢复，不自动部署。
+
+## 华为云正式版本更新流程
 
 1. 从 `develop` 创建功能分支，修改正文、资源或交互代码。可以直接在 GitHub 网页编辑并提交。
 2. 功能分支通过 PR 合并至 `develop`，准备发布时在 GitHub 将 `develop` 的 PR 合并至 `main`。
@@ -14,21 +24,23 @@
 
 ## 在 GitHub 页面发起部署
 
-打开 [检查并部署手册](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，将 **Use workflow from** 设为 **main**，再点击 **Run workflow**。这会重新检查并发布当前主分支，不需要创建新提交。
+打开 [检查并部署手册](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，将 **Use workflow from** 设为 **develop** 发布 GitHub Pages，或设为 **main** 发布华为云，再点击 **Run workflow**。这会重新检查并发布所选分支，不需要创建新提交。
 
 | GitHub 事件 | 执行结果 |
 | --- | --- |
-| 提交或合并至 `main` | 自动检查，通过后部署 |
-| 提交至 `develop`、功能分支或其他分支 | 自动检查 |
+| 提交或合并至 `main` | 自动检查，通过后部署华为云 |
+| 提交或合并至 `develop` | 自动检查，通过后部署 GitHub Pages |
+| 提交至功能分支或其他分支 | 自动检查 |
 | PR 目标为 `main` 或 `develop` | 自动检查 |
-| 页面手动运行 `main` | 检查，通过后部署 |
+| 页面手动运行 `main` | 检查，通过后部署华为云 |
+| 页面手动运行 `develop` | 检查，通过后部署 GitHub Pages |
 | 页面手动运行其他分支 | 检查 |
 
 所有操作由 GitHub 托管的 runner 执行，支持在 GitHub 网页上完成修改、PR 合并和部署。本机无需安装运行依赖，也无需保持开机。仓库协作者需要 **Write** 或更高权限才能提交仓库分支及手动运行工作流；其他贡献者通过 Fork 和 PR 参与。
 
 只有 `DEPLOY_REPOSITORY` 指定的仓库可以执行部署作业。Fork 仓库默认只运行检查；外部 PR 不会获得部署凭据。
 
-## GitHub 配置
+## 华为云 GitHub 配置
 
 工作流：[deploy.yml](../.github/workflows/deploy.yml)。部署环境：`production`。
 
