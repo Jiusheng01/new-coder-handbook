@@ -54,7 +54,7 @@ class HandbookApp {
     this.updateSidebar(route.page === 'chapter' && chapter ? chapter.id : route.page);
     this.root.querySelector('#handbook-search').value = route.page === 'search' ? route.query : '';
     const title = this.main.querySelector('h1')?.textContent || '学习路线';
-    document.title = `${title} · Agent 学习手记`;
+    document.title = `${title} · 新码农手册`;
     this.setMenu(false);
     window.scrollTo({ top: 0, behavior: 'instant' });
     this.main.focus({ preventScroll: true });
@@ -145,7 +145,7 @@ class HandbookApp {
     history.replaceState(null, '', `#/search?q=${encodeURIComponent(query)}`);
     this.main.innerHTML = handbookSearchPage(query, this.state);
     this.updateSidebar('search');
-    document.title = `搜索 ${query} · Agent 学习手记`;
+    document.title = `搜索 ${query} · 新码农手册`;
     document.dispatchEvent(new Event('handbook:navigation'));
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
@@ -224,12 +224,12 @@ class HandbookApp {
   }
 
   exportNotes() {
-    handbookDownload({ content: handbookNotesMarkdown(this.state), filename: 'Agent-学习笔记.md', type: 'text/markdown;charset=utf-8' });
+    handbookDownload({ content: handbookNotesMarkdown(this.state), filename: '新码农-学习笔记.md', type: 'text/markdown;charset=utf-8' });
     this.showToast('笔记已导出为 Markdown');
   }
 
   exportData() {
-    handbookDownload({ content: handbookBackup(this.state), filename: 'Agent-学习记录.json', type: 'application/json;charset=utf-8' });
+    handbookDownload({ content: handbookBackup(this.state), filename: '新码农-学习记录.json', type: 'application/json;charset=utf-8' });
     this.showToast('学习记录备份已导出');
   }
 

@@ -73,7 +73,7 @@ function handbookBackup(state) {
 }
 
 function handbookNotesMarkdown(state) {
-  const heading = `# Agent 学习手记\n\n来源：${HANDBOOK_SOURCE_URL}\n\n已学完 ${state.completed.length} / ${HANDBOOK_CHAPTERS.length} 章。\n`;
+  const heading = `# 新码农手册\n\n来源：${HANDBOOK_SOURCE_URL}\n\n已学完 ${state.completed.length} / ${HANDBOOK_CHAPTERS.length} 章。\n`;
   const chapters = HANDBOOK_CHAPTERS.filter(chapter => state.notes[chapter.id]?.trim() || state.completed.includes(chapter.id));
   return heading + chapters.map(chapter => {
     const status = state.completed.includes(chapter.id) ? '已学完' : '学习中';

@@ -1,18 +1,31 @@
-# Agent 学习手记
+# 新码农手册
 
-面向已有后端基础、准备学习 Agent 的开发者。根据用户提供的 [LINUX DO 帖子正文](https://linux.do/t/topic/3054536) 整理，采用手绘简约风格，包含 22 章、22 张可交互流程图、66 项动手练习、22 道自测和 40 份参考资料。
+**学习新技术，争做新码农。**
+
+保持好奇，持续学习，把新知识变成能讲清、能实现、能复用的本领。新码农手册是一份面向开发者的技术学习与实践手册，希望和每一位愿意动手的人一起，把陌生的概念学明白，把学到的东西做出来。
+
+当前从 **Agent 技术** 入手，围绕模型基础、工具调用、上下文工程、RAG、多 Agent 协作与评估，整理了一条适合已有后端基础的开发者循序学习的路线。内容包含 **22 章、22 张交互流程图、66 项练习、22 道自测和 40 份参考资料**，采用手绘简约的阅读界面，支持离线学习。
+
+## 我们怎样学习新技术
+
+- **带着问题学**：先理解一项技术解决什么问题，再看原理和适用场景。
+- **亲手做一遍**：从小练习开始，把流程跑通，把结果验证清楚。
+- **用自己的话讲清**：通过自测和笔记整理理解，发现遗漏就回到资料补足。
+- **把经验留下来**：记录实验、问题和解决过程，让每一次学习成为下一次实践的基础。
+
+读一章，做一题，写一段自己的理解。按自己的节奏，持续积累。
 
 ## 在线访问
 
 已部署至华为云：**http://139.159.249.100/**。
 
-公开仓库：https://github.com/qinsx2002/linuxdo-learning-handbook 。`main` 为线上版本，`develop` 为协作开发分支。
+公开仓库：[qinsx2002/new-coder-handbook](https://github.com/qinsx2002/new-coder-handbook)。`main` 为线上版本，`develop` 为协作开发分支。
 
 各分支提交都会由 GitHub Actions 自动检查；在 GitHub 合并 PR 到 `main` 后，检查通过即自动发布至华为云。检查、打包、部署和线上核对全部由 GitHub 托管的 runner 执行，无需本机开机或启动服务。
 
-需要手动部署时，打开 [GitHub Actions 发布页面](https://github.com/qinsx2002/linuxdo-learning-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，选择 **main**，再点击 **Run workflow**。选择其他分支时只执行检查。
+需要手动部署时，打开 [GitHub Actions 发布页面](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，选择 **main**，再点击 **Run workflow**。选择其他分支时只执行检查。
 
-欢迎通过 Fork 和 Pull Request 参与完善。协作方式与 GitHub 网页操作见 [协作说明](CONTRIBUTING.md)。
+欢迎通过 Fork 和 Pull Request 补充讲解、完善练习、纠正错误、分享经过验证的实践。协作方式与 GitHub 网页操作见 [协作说明](CONTRIBUTING.md)。
 
 部署采用版本目录与 `current` 符号链接原子切换。详细配置、失败处理及人工回退见 [部署说明](deploy/README.md)。
 
@@ -44,6 +57,8 @@ Windows 安装 Python 后可使用 `py -m http.server 4387 --bind 127.0.0.1`，�
 记录保存在当前浏览器的 `localStorage`，键为 `agent-handbook:v1`。不同浏览器、协议、主机和端口的存储相互独立；`file://` 的持久化行为取决于浏览器。需要迁移时使用导出 / 导入。读写失败会明确报错，不伪装为保存成功。
 
 ## 内容来源
+
+当前 Agent 学习路线参考 [LINUX DO 帖子正文](https://linux.do/t/topic/3054536) 整理。
 
 原帖公开页面与 JSON 接口在编写时返回 404，用户粘贴的正文是实际内容依据，含 2026-10-22 补充路线。手册没有抓取或补写评论区、未提供的折叠计划、作者身份或泄露源码。
 

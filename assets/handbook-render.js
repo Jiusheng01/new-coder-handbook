@@ -35,7 +35,7 @@ function handbookShell() {
     <div class="handbook-workspace">
       <header class="handbook-topbar">
         <button class="handbook-menu-button handbook-icon-button" data-action="menu" aria-label="打开目录" aria-expanded="false" aria-controls="handbook-sidebar">${handbookIcon('menu')}</button>
-        <a href="#/" class="handbook-topbar-title">一本写给后端开发者的学习手册</a>
+        <a href="#/" class="handbook-topbar-title">保持好奇，持续学习。</a>
         <nav class="handbook-topnav" aria-label="快捷导航"><a href="#/resources">资料索引</a><a href="#/notes">我的笔记</a></nav>
         <div class="handbook-searchbox">${handbookIcon('search')}<input id="handbook-search" type="search" aria-label="搜索章节与知识点" placeholder="搜索知识点…" autocomplete="off"><kbd>/</kbd></div>
       </header>
@@ -48,7 +48,7 @@ function handbookShell() {
 
 function handbookSidebar(state, activeId) {
   const progress = Math.round(state.completed.length / HANDBOOK_CHAPTERS.length * 100);
-  return `<a class="handbook-brand" href="#/">${handbookIcon('book')}<span>Agent 学习手记<small>从后端，到智能体。</small></span></a>
+  return `<a class="handbook-brand" href="#/">${handbookIcon('book')}<span>新码农手册<small>持续学习，动手实践。</small></span></a>
     <a class="handbook-overview ${activeId === 'home' ? 'is-active' : ''}" href="#/" ${activeId === 'home' ? 'aria-current="page"' : ''}>${handbookIcon('compass')} 学习路线 <span>↗</span></a>
     <div class="handbook-sidebar-label">CONTENTS <span>目录</span></div>
     <nav class="handbook-chapter-nav" aria-label="学习章节">${HANDBOOK_STAGES.map((stage, index) => handbookSidebarStage({ stage, index, state, activeId })).join('')}</nav>
@@ -90,9 +90,9 @@ function handbookHeroArt() {
 function handbookHome(state) {
   const next = HANDBOOK_CHAPTERS.find(chapter => !state.completed.includes(chapter.id)) || HANDBOOK_CHAPTERS[0];
   const resume = HANDBOOK_CHAPTERS.find(chapter => chapter.id === state.lastChapter) || next;
-  return `<section class="handbook-hero"><div class="handbook-hero-copy"><div class="handbook-eyebrow"><span></span> 后端开发者的 AGENT 成长路线</div>
-    <h1>从后端出发，<br>读懂 <span class="handbook-underline">Agent 的世界。</span></h1>
-    <p>把散落的知识，连成一条清晰的路。<br>读一段原理，画一张草图，亲手做出你的第一个 Agent。</p>
+  return `<section class="handbook-hero"><div class="handbook-hero-copy"><div class="handbook-eyebrow"><span></span> 新码农的技术成长路线 · AGENT 篇</div>
+    <h1>学习新技术，<br>争做<span class="handbook-underline">新码农。</span></h1>
+    <p>保持好奇，把新知识变成实践本领。<br>从 Agent 技术入手，读懂原理、拆解流程，亲手做出小作品。</p>
     <div class="handbook-hero-actions"><a class="handbook-button" href="#/chapter/${resume.id}">${state.lastChapter ? '继续上次阅读' : '翻开第一章'} ${handbookIcon('arrow')}</a><a class="handbook-text-link" href="#/resources">先逛逛资料库 ${handbookIcon('external')}</a></div>
     <div class="handbook-hero-meta"><span>22 个章节</span><i></i><span>每章一张流程图</span><i></i><span>按自己的节奏</span></div></div>${handbookHeroArt()}</section>
     <div class="handbook-source-strip">${handbookIcon('link')}<p>循着一位后端开发者的转型复盘整理，补上原理、实践与自测。</p><a href="#/about">阅读说明 ${handbookIcon('arrow')}</a></div>

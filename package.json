@@ -1,8 +1,8 @@
 {
-  "name": "linuxdo-learning-handbook",
+  "name": "new-coder-handbook",
   "version": "1.0.0",
   "private": true,
-  "description": "后端开发者的 Agent 学习手记：离线可读的手绘静态手册",
+  "description": "新码农手册：学习新技术，争做新码农。从 Agent 技术入手，在实践中持续成长。",
   "scripts": {
     "check": "node scripts/verify.cjs",
     "test": "node --test scripts/state.test.cjs",

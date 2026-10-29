@@ -17,7 +17,7 @@
 
 1. 点击仓库右上角 **Fork**，复制到自己的 GitHub 账号；如需从 `develop` 开始，创建 Fork 时取消 **Copy the main branch only**。
 2. 在自己的 Fork 中，从 `develop` 创建 `feature/<主题>` 或 `fix/<主题>` 分支，修改文件并提交。
-3. 创建 Pull Request，将 **base repository** 选为 `qinsx2002/linuxdo-learning-handbook`、**base** 选为 `develop`，**head repository** 和 **compare** 选择自己的 Fork 与功能分支。
+3. 创建 Pull Request，将 **base repository** 选为 `qinsx2002/new-coder-handbook`、**base** 选为 `develop`，**head repository** 和 **compare** 选择自己的 Fork 与功能分支。
 4. 等待维护者审阅，根据意见补充提交。合并后由维护者统一发布。
 
 Fork 仓库默认只运行检查。部署凭据只用于指定仓库的主分支发布，外部贡献者无需提供或获取这些凭据。
@@ -35,7 +35,7 @@ PR 检查由 GitHub 自动执行。上述审阅及发布步骤是协作约定，
 
 ## 手动发布主分支
 
-打开 [Actions → 检查并部署手册](https://github.com/qinsx2002/linuxdo-learning-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，选择 **main**，再次点击 **Run workflow**。
+打开 [Actions → 检查并部署手册](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，选择 **main**，再次点击 **Run workflow**。
 
 页面会显示“内容与发布检查”和“发布到华为云”两个作业，全部成功表示发布及线上文件核对通过。选择其他分支只运行检查。
 

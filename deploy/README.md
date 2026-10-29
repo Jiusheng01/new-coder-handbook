@@ -1,6 +1,6 @@
 # 主体手册自动部署
 
-仓库：`qinsx2002/linuxdo-learning-handbook`，默认分支：`main`，协作分支：`develop`。
+仓库：`qinsx2002/new-coder-handbook`，默认分支：`main`，协作分支：`develop`。
 
 ## 更新流程
 
@@ -14,7 +14,7 @@
 
 ## 在 GitHub 页面发起部署
 
-打开 [检查并部署手册](https://github.com/qinsx2002/linuxdo-learning-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，将 **Use workflow from** 设为 **main**，再点击 **Run workflow**。这会重新检查并发布当前主分支，不需要创建新提交。
+打开 [检查并部署手册](https://github.com/qinsx2002/new-coder-handbook/actions/workflows/deploy.yml)，点击 **Run workflow**，将 **Use workflow from** 设为 **main**，再点击 **Run workflow**。这会重新检查并发布当前主分支，不需要创建新提交。
 
 | GitHub 事件 | 执行结果 |
 | --- | --- |
@@ -38,7 +38,7 @@
 | Actions Secret | `DEPLOY_KNOWN_HOSTS` | 经现有可信 SSH 连接读取的服务器主机公钥 |
 | Actions Variable | `DEPLOY_HOST` | `139.159.249.100` |
 | Actions Variable | `DEPLOY_USER` | `handbook-deploy` |
-| Actions Variable | `DEPLOY_REPOSITORY` | `qinsx2002/linuxdo-learning-handbook` |
+| Actions Variable | `DEPLOY_REPOSITORY` | `qinsx2002/new-coder-handbook` |
 
 私钥只写入 runner 的临时 SSH 文件，任务结束清理。主机公钥固定校验，不在每次部署时临时信任网络扫描结果。PR 不执行部署，只有主分支可以进入部署作业。
 
