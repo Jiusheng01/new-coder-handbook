@@ -11,6 +11,8 @@ const baseURL = process.env.HANDBOOK_BASE_URL || 'http://127.0.0.1:4387';
 const book = loadHandbook();
 const chapterURL = id => `${baseURL}/#/chapter/${id}`;
 const MIN_TOUCH_TARGET = 44;
+const MIN_TEXT_SIZE = 11;
+const READING_MEASURE = 720;
 
 async function checkChapters(page) {
   for (const chapter of book.chapters) {
@@ -163,6 +165,55 @@ async function readVisibleBoxes(locator, { excludeAriaHidden = false } = {}) {
   return boxes.filter(box => box.display !== 'none' && box.visibility !== 'hidden' && box.width > 0 && box.height > 0 && (!excludeAriaHidden || !box.ariaHidden));
 }
 
+async function assertMinimumTextSize(page, label) {
+  const violations = await page.evaluate(minimum => {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const found = [];
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (!node.textContent.trim()) continue;
+      const element = node.parentElement;
+      if (!element || element.closest('svg, [hidden], [aria-hidden="true"], .handbook-skip')) continue;
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      if (style.display === 'none' || style.visibility === 'hidden' || rect.width === 0 || rect.height === 0) continue;
+      const size = parseFloat(style.fontSize);
+      if (size < minimum) found.push({ text: node.textContent.trim().slice(0, 30), size, className: String(element.className) });
+    }
+    return found;
+  }, MIN_TEXT_SIZE);
+  assert.deepEqual(violations, [], `${label}：存在小于 ${MIN_TEXT_SIZE}px 的可见文字`);
+}
+
+async function assertReadingTypography(page, label) {
+  const metrics = await page.locator('.lesson-concepts p').first().evaluate(element => {
+    const style = getComputedStyle(element);
+    const rect = element.getBoundingClientRect();
+    return { fontSize: parseFloat(style.fontSize), lineHeight: parseFloat(style.lineHeight), textAlign: style.textAlign, width: rect.width, maxWidth: style.maxWidth, innerWidth };
+  });
+  const expectedSize = metrics.innerWidth <= 900 ? 16 : 15;
+  assert.equal(metrics.fontSize, expectedSize, `${label}：正文需要 ${expectedSize}px`);
+  assert.equal(metrics.textAlign, 'left', `${label}：正文应左对齐`);
+  assert.ok(metrics.width <= READING_MEASURE + 0.5, `${label}：正文行长超过 ${READING_MEASURE}px`);
+  assert.ok(Math.abs(metrics.lineHeight / metrics.fontSize - 1.9) < 0.05, `${label}：正文行高应约为 1.9`);
+}
+
+async function assertFontStacks(page) {
+  const fonts = await page.evaluate(() => {
+    const style = getComputedStyle(document.documentElement);
+    return {
+      sans: style.getPropertyValue('--handbook-sans'),
+      serif: style.getPropertyValue('--handbook-serif'),
+      hand: style.getPropertyValue('--handbook-hand'),
+      mono: style.getPropertyValue('--handbook-mono')
+    };
+  });
+  assert.ok(fonts.sans.trim().startsWith('"PingFang SC"'), '无衬线字体栈未优先 PingFang SC');
+  assert.ok(fonts.serif.trim().startsWith('"Songti SC"'), '衬线字体栈未优先 Songti SC');
+  assert.ok(fonts.hand.includes('Kaiti SC') && fonts.hand.includes('KaiTi'), '手写字体栈缺少楷体回退');
+  assert.ok(fonts.mono.includes('Cascadia Code') && fonts.mono.includes('Menlo'), '等宽字体栈缺少回退');
+}
+
 async function assertChapterStructure(page, chapter, label = chapter.id) {
   assert.equal(await page.locator('.lesson-flow-node').count(), 4, label);
   assert.equal(await page.locator('.lesson-task').count(), 3, label);
@@ -211,6 +262,8 @@ async function checkResponsive(page) {
       await page.goto(`${baseURL}${route}`);
       await page.locator('h1').waitFor();
       await assertNoPageOverflow(page, `${width} ${name}`);
+      if ([320, 768, 1440].includes(width)) await assertMinimumTextSize(page, `${width} ${name}`);
+      if ((name === '章节' || name === '表格章节') && [320, 768, 1440].includes(width)) await assertReadingTypography(page, `${width} ${name}`);
       const topbar = await measureTopbar(page);
       for (let index = 0; index < topbar.boxes.length - 1; index += 1) {
         assert.ok(topbar.boxes[index].right <= topbar.boxes[index + 1].left + 1, `${width} ${name}：顶部导航内容重叠`);
@@ -225,7 +278,11 @@ async function checkResponsive(page) {
       }
     }
   }
-  console.log('通过：320 / 375 / 390 / 430 / 768 / 1024 / 1440 视口与首页、章节、搜索、笔记、资料、说明页无横向溢出、导航不重叠');
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(baseURL);
+  await page.locator('h1').waitFor();
+  await assertFontStacks(page);
+  console.log('通过：320 / 375 / 390 / 430 / 768 / 1024 / 1440 视口、最小字号、阅读宽度与字体栈');
 }
 
 async function checkMobileTouchTargets(page) {
