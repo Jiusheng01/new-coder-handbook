@@ -2,9 +2,9 @@
 :root {
   --handbook-paper: #f8f6ef;
   --handbook-ink: #303b32;
+  /* 长文用阅读墨色，辅助信息统一用 muted；绿色文字复用品牌绿。 */
   --handbook-reading-ink: #4e5949;
   --handbook-muted: #5c6655;
-  --handbook-muted-strong: #56634e;
   --handbook-warm-muted: #665d45;
   --handbook-warning-ink: #7a5a34;
   --handbook-green: #4c664b;
@@ -36,7 +36,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 96px; }
 body { margin: 0; background: var(--handbook-paper); color: var(--handbook-ink); font-family: var(--handbook-sans); font-size: var(--text-card); line-height: var(--leading-ui); line-break: strict; }
-input::placeholder, textarea::placeholder { color: var(--handbook-muted); opacity: 1; }
+.handbook-searchbox input::placeholder, .lesson-notes textarea::placeholder { color: var(--handbook-muted); opacity: 1; }
 button, input, textarea { font: inherit; }
 button, a, input, textarea, summary { -webkit-tap-highlight-color: transparent; }
 button, summary { cursor: pointer; }
@@ -65,7 +65,7 @@ svg { display: block; }
 .handbook-nav-stage { margin-top: 20px; }
 .handbook-nav-stage:first-child { margin-top: 8px; }
 .handbook-nav-stage > p { color: var(--handbook-muted); font-size: var(--text-meta); font-weight: 600; margin: 0 9px 8px; letter-spacing: .6px; }
-.handbook-nav-stage > p > span { font-family: Georgia, serif; font-size: var(--text-meta); margin-right: 9px; color: var(--handbook-muted); }
+.handbook-nav-stage > p > span { font-family: Georgia, serif; font-size: var(--text-meta); margin-right: 9px; color: #939a84; }
 .handbook-chapter-link { display: flex; align-items: flex-start; gap: 10px; border-radius: 4px; padding: 7px 8px; margin: 2px 0; font-size: var(--text-ui); line-height: 1.65; color: var(--handbook-muted); }
 .handbook-chapter-link:hover, .handbook-overview:hover { background: #e4e7db; color: var(--handbook-green); }
 .handbook-chapter-link.is-active { background: #dfe6d5; color: #3b563b; font-weight: 600; }
@@ -85,14 +85,14 @@ svg { display: block; }
 .handbook-workspace { margin-left: var(--handbook-sidebar-width); min-height: 100vh; display: flex; flex-direction: column; transition: margin-left .2s; }
 .handbook-topbar { display: flex; align-items: center; gap: 28px; min-height: var(--handbook-topbar-height); padding: 0 44px; border-bottom: 1px solid #e5e6db; background: var(--handbook-paper); position: sticky; top: 0; z-index: 20; }
 .handbook-topbar-title { color: var(--handbook-muted); font-size: var(--text-meta); letter-spacing: .6px; margin-right: auto; }
-.handbook-topnav { display: flex; gap: 23px; white-space: nowrap; color: #687460; font-size: var(--text-ui); }
+.handbook-topnav { display: flex; gap: 23px; white-space: nowrap; color: var(--handbook-muted); font-size: var(--text-ui); }
 .handbook-topnav a:hover { color: #2f4b32; text-decoration: underline; text-underline-offset: 5px; }
 .handbook-searchbox { display: flex; align-items: center; gap: 9px; padding: 7px 10px; width: 206px; border: 1px solid #d9ddcf; background: #f0f1e8; border-radius: 5px 6px 4px 7px; color: #8a927e; }
 .handbook-searchbox svg { width: 15px; height: 15px; }
 .handbook-searchbox input { min-width: 0; width: 100%; padding: 0; background: transparent; border: none; color: var(--handbook-ink); font-size: var(--text-ui); }
 .handbook-searchbox input:focus { outline: none; }
 .handbook-searchbox:focus-within { outline: 2px solid #9eae8e; outline-offset: 2px; }
-.handbook-searchbox kbd { border: 1px solid #dce0d4; border-radius: 3px; padding: 0 5px; font-family: var(--handbook-mono); font-size: var(--text-caption); line-height: 1.5; }
+.handbook-searchbox kbd { border: 1px solid #dce0d4; border-radius: 3px; padding: 0 5px; color: var(--handbook-muted); font-family: var(--handbook-mono); font-size: var(--text-caption); line-height: 1.5; }
 .handbook-main { width: 100%; max-width: 1440px; padding: 0 52px 60px; margin: 0 auto; flex: 1; outline: none; }
 .handbook-hero { display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; align-items: center; padding: 64px 0 48px; }
 .handbook-eyebrow { display: flex; align-items: center; gap: 8px; font-size: var(--text-caption); font-weight: 500; letter-spacing: 1.6px; color: var(--handbook-muted); margin: 0 0 18px; }
@@ -158,7 +158,7 @@ svg { display: block; }
 .handbook-method-label svg { width: 16px; }
 .handbook-method h2 { font-family: var(--handbook-serif); font-size: 1.5rem; font-weight: 600; line-height: 1.8; margin: 5px 0; }
 .handbook-method-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-content: center; font-size: var(--text-ui); }
-.handbook-method-steps b { font-family: Georgia, serif; font-size: 1.0625rem; font-style: italic; color: var(--handbook-muted); margin-right: 7px; }
+.handbook-method-steps b { font-family: Georgia, serif; font-size: 1.0625rem; font-style: italic; color: #8a9b78; margin-right: 7px; }
 .handbook-method > p { grid-column: 1 / -1; color: var(--handbook-muted); font-size: var(--text-meta); margin: 9px 0 0; }
 .handbook-footer { display: flex; justify-content: space-between; align-items: center; margin: 0 52px; padding: 22px 0; border-top: 1px solid #e1e4d5; color: var(--handbook-muted); font-size: var(--text-caption); }
 .handbook-footer > span, .handbook-footer > a { display: flex; align-items: center; gap: 7px; }
@@ -177,7 +177,7 @@ svg { display: block; }
 .handbook-reading-card p { color: var(--handbook-muted); font-size: var(--text-card); margin: 10px 0; }
 .handbook-reading-card small, .handbook-reading-card > div > span { color: var(--handbook-muted); font-size: var(--text-meta); }
 .handbook-reading-card > svg { margin-top: 24px; width: 18px; color: #8a9b78; }
-.handbook-tag { display: inline-block; background: #eaedde; color: var(--handbook-muted-strong); font-size: var(--text-caption); padding: 3px 7px; border-radius: 3px; white-space: nowrap; }
+.handbook-tag { display: inline-block; background: #eaedde; color: var(--handbook-green); font-size: var(--text-caption); padding: 3px 7px; border-radius: 3px; white-space: nowrap; }
 .handbook-filter-row { display: flex; flex-wrap: wrap; gap: 9px; margin: 0 0 24px; }
 .handbook-filter { border: 1px solid #d5dcc8; background: transparent; border-radius: 5px 3px 5px 4px; padding: 7px 15px; font-size: var(--text-ui); color: var(--handbook-muted); }
 .handbook-filter.is-active { background: #dfe7d2; border-color: #afbea0; color: #4c6844; }
@@ -188,7 +188,7 @@ svg { display: block; }
 .handbook-resource-card > a > svg { width: 14px; color: #7e8e6c; }
 .handbook-resource-card > p { font-size: var(--text-meta); color: var(--handbook-muted); margin: 11px 0 16px; overflow-wrap: anywhere; }
 .handbook-resource-card > div { display: flex; flex-wrap: wrap; gap: 7px; border-top: 1px dashed #e0e4d5; padding-top: 13px; }
-.handbook-resource-chapter { font-size: var(--text-meta); color: var(--handbook-muted-strong); padding: 3px 7px; background: #f1f3e8; border-radius: 3px; }
+.handbook-resource-chapter { font-size: var(--text-meta); color: var(--handbook-green); padding: 3px 7px; background: #f1f3e8; border-radius: 3px; }
 .handbook-resource-chapter:hover { background: #e5ecd8; }
 .handbook-notes-toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 34px; }
 .handbook-import-label { cursor: pointer; }
@@ -280,7 +280,7 @@ svg { display: block; }
   .handbook-topbar-title { display: inline-flex; align-items: center; min-height: var(--handbook-touch-target); margin-right: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .handbook-topnav { display: none; }
   .handbook-searchbox { flex: 1 1 auto; width: auto; max-width: 360px; min-height: var(--handbook-touch-target); margin-left: auto; padding: 0 12px; }
-  .handbook-searchbox input { height: var(--handbook-touch-target); font-size: var(--text-reading-mobile); }
+  .handbook-searchbox input { height: var(--handbook-touch-target); font-size: 1rem; }
   .handbook-searchbox kbd { display: none; }
   .handbook-icon-button { width: var(--handbook-touch-target); height: var(--handbook-touch-target); }
   .handbook-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 25; background: #26362550; border: none; }
@@ -297,6 +297,7 @@ svg { display: block; }
   .handbook-hero { grid-template-columns: minmax(0, 1.1fr) minmax(240px, .9fr); padding-top: 37px; padding-bottom: 35px; }
   .handbook-hero h1 { font-size: clamp(1.875rem, 4.8vw, 2.4375rem); }
   .handbook-hero-art { width: 100%; max-width: 320px; }
+  .handbook-hero-copy > p, .handbook-note-card > p { font-size: var(--text-reading-mobile); }
   .handbook-footer { margin: 0 25px; padding-bottom: max(22px, calc(env(safe-area-inset-bottom) + 12px)); }
   .handbook-footer > span, .handbook-footer > a, .handbook-footer-links a { min-height: var(--handbook-touch-target); }
   .handbook-toast { left: 50%; width: max-content; max-width: calc(100vw - 32px); bottom: max(26px, calc(env(safe-area-inset-bottom) + 14px)); }
@@ -317,7 +318,6 @@ svg { display: block; }
   .handbook-back-link { margin-bottom: 14px; }
   .handbook-hero { display: flex; flex-direction: column; align-items: flex-start; padding-bottom: 22px; }
   .handbook-hero h1 { font-size: clamp(1.875rem, 9vw, 2.25rem); letter-spacing: .3px; }
-  .handbook-hero-copy > p { font-size: var(--text-reading-mobile); line-height: var(--leading-reading); }
   .handbook-hero-art { width: 100%; max-width: 340px; margin: 20px auto 0; }
   .handbook-hero-meta { margin-top: 23px; }
   .handbook-hero-actions { gap: 22px; }
